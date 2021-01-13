@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour
 {
+    [SerializeField] float rotatingForce = 1f;
+
     Rigidbody myRigidbody;
 
     void Start()
@@ -27,11 +29,11 @@ public class Rocket : MonoBehaviour
         // Rotate 'wAsD'
         if (Input.GetKey(KeyCode.A))
         {
-
+            this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-
+            this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
         }
     }
 }
