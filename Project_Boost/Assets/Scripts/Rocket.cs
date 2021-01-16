@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -13,8 +15,16 @@ public class Rocket : MonoBehaviour
     AudioSource myAudioSource;
     float defaultAudioSourcePitch = 0f;
     float defaultAudioSourceVolume = 0f;
+    enum State
+    {
+        Alive,
+        Dying,
+        Transcending
+    };
+    State state = State.Alive;
 
-    const string FRIENDLY = "Friendly";
+    const string FRIENDLYTAG = "Friendly";
+    const string FINISH_TAG = "Finish";
 
     private void Start()
     {
@@ -31,13 +41,24 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (state != State.Alive)
+        {
+            return;
+        }
+
         switch (collision.gameObject.tag)
         {
-            case FRIENDLY:
+            case FRIENDLYTAG:
                 print("friendly");
                 break;
+            case FINISH_TAG:
+                state = State.Transcending;
+                Invoke("LoadNextScene", 1);
+                break;
             default:
-                print("FOK!");
+                print("shit = " + collision.gameObject.name);
+                state = State.Dying;
+                Invoke("LoadStartScene", 1);
                 break;
         }
     }
@@ -52,12 +73,12 @@ public class Rocket : MonoBehaviour
     {
         myRigidbody.freezeRotation = true;
         // Rotate 'wAsD'
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && state == State.Alive)
         {
             this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
             myRigidbody.ResetInertiaTensor();
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D) && state == State.Alive)
         {
             this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
             myRigidbody.ResetInertiaTensor();
@@ -68,7 +89,7 @@ public class Rocket : MonoBehaviour
     private void Thrusting()
     {
         // Thrust 'Space'
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && state == State.Alive)
         {
             myRigidbody.AddRelativeForce(Vector3.up * thrustingForce);
             SetThrustingSound();
@@ -95,5 +116,23 @@ public class Rocket : MonoBehaviour
             myAudioSource.pitch = defaultAudioSourcePitch;
             myAudioSource.volume = defaultAudioSourceVolume;
         }
+    }
+
+    void LoadNextScene()
+    {
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        if (currentScene < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(currentScene + 1);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    void LoadStartScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }

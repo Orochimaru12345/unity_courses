@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3100589687592090930}
   - component: {fileID: 8515900824675427477}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: BackWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 4433467707688459658}
   - component: {fileID: 7239758058526797039}
   m_Layer: 0
-  m_Name: Booster1
+  m_Name: LeftBooster1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 3430678781013463196}
   - component: {fileID: 4980012933022761839}
   m_Layer: 0
-  m_Name: Booster1 (1)
+  m_Name: RightBooster1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,7 +447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotatingForce: 150
-  thrustingForce: 3.5
+  thrustingForce: 3.8
   thrustingVolume: 0.8
   thrustingPitch: 1.6
 --- !u!1 &3430641297552464201
@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 373052746774862804}
   - component: {fileID: 8536274736271153625}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: FrontWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -720,7 +720,7 @@ GameObject:
   - component: {fileID: 5808924056038951320}
   - component: {fileID: 8109097856189068040}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: RightWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -815,7 +815,7 @@ GameObject:
   - component: {fileID: 8048878445263890483}
   - component: {fileID: 6335397202775248158}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: LeftWIng
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
