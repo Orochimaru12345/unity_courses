@@ -14,7 +14,9 @@ public class Rocket : MonoBehaviour
     float defaultAudioSourcePitch = 0f;
     float defaultAudioSourceVolume = 0f;
 
-    void Start()
+    const string FRIENDLY = "Friendly";
+
+    private void Start()
     {
         myRigidbody = this.GetComponent<Rigidbody>();
         myAudioSource = this.GetComponent<AudioSource>();
@@ -22,12 +24,48 @@ public class Rocket : MonoBehaviour
         defaultAudioSourceVolume = myAudioSource.volume;
     }
 
-    void Update()
+    private void Update()
     {
         ProcessInput();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case FRIENDLY:
+                print("friendly");
+                break;
+            default:
+                print("FOK!");
+                break;
+        }
+    }
+
     void ProcessInput()
+    {
+        Thrusting();
+        Rotating();
+    }
+
+    private void Rotating()
+    {
+        myRigidbody.freezeRotation = true;
+        // Rotate 'wAsD'
+        if (Input.GetKey(KeyCode.A))
+        {
+            this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
+            myRigidbody.ResetInertiaTensor();
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
+            myRigidbody.ResetInertiaTensor();
+        }
+        myRigidbody.freezeRotation = false;
+    }
+
+    private void Thrusting()
     {
         // Thrust 'Space'
         if (Input.GetKey(KeyCode.Space))
@@ -38,16 +76,6 @@ public class Rocket : MonoBehaviour
         else
         {
             SetIdleSound();
-        }
-
-        // Rotate 'wAsD'
-        if (Input.GetKey(KeyCode.A))
-        {
-            this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
         }
     }
 
