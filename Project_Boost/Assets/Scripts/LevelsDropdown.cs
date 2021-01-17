@@ -16,6 +16,7 @@ public class LevelsDropdown : MonoBehaviour
 
         dropdownOptions.Add(new Dropdown.OptionData("Level 1"));
         dropdownOptions.Add(new Dropdown.OptionData("Level 2"));
+        dropdownOptions.Add(new Dropdown.OptionData("Level 3"));
 
         dropdown.ClearOptions();
         dropdown.AddOptions(dropdownOptions);

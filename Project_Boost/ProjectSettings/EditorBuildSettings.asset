@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Level_1_Straight.unity
-    guid: cc04450cf094f844a92efdd31f1568e6
+    path: Assets/Scenes/Level 1 Gate.unity
+    guid: 575715b9bcbf1b64fb1128c11a3dc48c
   - enabled: 1
-    path: Assets/Scenes/Level_2_Curved.unity
-    guid: bb83a7becfc3a1541b9667c418edc194
+    path: Assets/Scenes/Level 2 Curved.unity
+    guid: 64a7e1d9e5daae84b8c8c6ca51e22ec8
   m_configObjects: {}

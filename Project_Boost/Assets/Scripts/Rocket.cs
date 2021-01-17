@@ -10,11 +10,16 @@ public class Rocket : MonoBehaviour
     [SerializeField] float thrustingForce = 1f;
     [SerializeField] float thrustingVolume = 0.8f;
     [SerializeField] float thrustingPitch = 1.6f;
+    [SerializeField] ParticleSystem mainEngineParticles = null;
+    [SerializeField] ParticleSystem landingParticles = null;
+    [SerializeField] ParticleSystem explosionParticles = null;
 
     Rigidbody myRigidbody;
-    AudioSource myAudioSource;
+    AudioSource engineAudioSource;
+    AudioSource explosionAudioSource;
     float defaultAudioSourcePitch = 0f;
     float defaultAudioSourceVolume = 0f;
+
     enum State
     {
         Alive,
@@ -29,9 +34,20 @@ public class Rocket : MonoBehaviour
     private void Start()
     {
         myRigidbody = this.GetComponent<Rigidbody>();
-        myAudioSource = this.GetComponent<AudioSource>();
-        defaultAudioSourcePitch = myAudioSource.pitch;
-        defaultAudioSourceVolume = myAudioSource.volume;
+
+        foreach (var audioSource in GetComponents<AudioSource>())
+        {
+            if (audioSource.clip.name == "explosion")
+            {
+                explosionAudioSource = audioSource;
+            }
+            else
+            {
+                engineAudioSource = audioSource;
+                defaultAudioSourcePitch = engineAudioSource.pitch;
+                defaultAudioSourceVolume = engineAudioSource.volume;
+            }
+        }
     }
 
     private void Update()
@@ -52,24 +68,21 @@ public class Rocket : MonoBehaviour
                 print("friendly");
                 break;
             case FINISH_TAG:
-                state = State.Transcending;
-                Invoke("LoadNextScene", 1);
+                LandSuccessfully();
                 break;
             default:
-                print("shit = " + collision.gameObject.name);
-                state = State.Dying;
-                Invoke("LoadStartScene", 1);
+                Explode(collision);
                 break;
         }
     }
 
     void ProcessInput()
     {
-        Thrusting();
-        Rotating();
+        RespondToThrustInput();
+        RespondToRotateInput();
     }
 
-    private void Rotating()
+    private void RespondToRotateInput()
     {
         myRigidbody.freezeRotation = true;
         // Rotate 'wAsD'
@@ -86,35 +99,44 @@ public class Rocket : MonoBehaviour
         myRigidbody.freezeRotation = false;
     }
 
-    private void Thrusting()
+    private void RespondToThrustInput()
     {
         // Thrust 'Space'
         if (Input.GetKey(KeyCode.Space) && state == State.Alive)
         {
             myRigidbody.AddRelativeForce(Vector3.up * thrustingForce);
             SetThrustingSound();
+            // mainEngineParticles.main.startLifetime = 1f;
+            var main = mainEngineParticles.main;
+            main.startSpeed = 15f;
+            var emission = mainEngineParticles.emission;
+            emission.rateOverTime = 100;
         }
         else
         {
             SetIdleSound();
+            var main = mainEngineParticles.main;
+            main.startSpeed = 5f;
+            var emission = mainEngineParticles.emission;
+            emission.rateOverTime = 50;
         }
     }
 
     void SetThrustingSound()
     {
-        if (myAudioSource)
+        if (engineAudioSource)
         {
-            myAudioSource.pitch = thrustingPitch;
-            myAudioSource.volume = thrustingVolume;
+            engineAudioSource.pitch = thrustingPitch;
+            engineAudioSource.volume = thrustingVolume;
         }
     }
 
     void SetIdleSound()
     {
-        if (myAudioSource)
+        if (engineAudioSource)
         {
-            myAudioSource.pitch = defaultAudioSourcePitch;
-            myAudioSource.volume = defaultAudioSourceVolume;
+            engineAudioSource.pitch = defaultAudioSourcePitch;
+            engineAudioSource.volume = defaultAudioSourceVolume;
         }
     }
 
@@ -134,5 +156,24 @@ public class Rocket : MonoBehaviour
     void LoadStartScene()
     {
         SceneManager.LoadScene(0);
+    }
+
+    void Explode(Collision collision)
+    {
+        Debug.Log("I hit: '" + collision.gameObject.name + "'");
+
+        engineAudioSource.Stop();
+        explosionAudioSource.Play();
+        explosionParticles.Play();
+        state = State.Dying;
+
+        Invoke("LoadStartScene", 1);
+    }
+
+    void LandSuccessfully()
+    {
+        state = State.Transcending;
+        landingParticles.Play();
+        Invoke("LoadNextScene", 1);
     }
 }
