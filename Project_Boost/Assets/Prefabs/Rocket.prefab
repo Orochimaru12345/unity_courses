@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotatingForce: 150
-  thrustingForce: 3.8
+  thrustingForce: 800
   thrustingVolume: 0.8
   thrustingPitch: 1.6
   mainEngineParticles: {fileID: 5651983250962043352}

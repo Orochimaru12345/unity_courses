@@ -30,7 +30,7 @@ public class AsteroidBelt : MonoBehaviour
 
         for (int i = 0; i < layers; i++)
         {
-            float x = -(targetLength / 2);
+            float x = -(targetLength / 2) + (minDistance + maxDistance) / 2 + (minSize + maxSize) / 2;
             float lenght = 0f;
             float maxDiameterInLayer = 0f;
             float flySpeed = Random.Range(minSpeed, maxSpeed);

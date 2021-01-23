@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class Rocket : MonoBehaviour
 {
     [SerializeField] float rotatingForce = 1f;
-    [SerializeField] float thrustingForce = 1f;
+    [SerializeField] float thrustingForce = 14f; // fix bug, when rocket does not thrust
     [SerializeField] float thrustingVolume = 0.8f;
     [SerializeField] float thrustingPitch = 1.6f;
     [SerializeField] ParticleSystem mainEngineParticles = null;
@@ -19,6 +19,9 @@ public class Rocket : MonoBehaviour
     AudioSource explosionAudioSource;
     float defaultAudioSourcePitch = 0f;
     float defaultAudioSourceVolume = 0f;
+    bool collisionsDisabled = false;
+    ParticleSystem.MainModule engineMainModule;
+    ParticleSystem.EmissionModule engineEmissionModule;
 
     enum State
     {
@@ -48,6 +51,9 @@ public class Rocket : MonoBehaviour
                 defaultAudioSourceVolume = engineAudioSource.volume;
             }
         }
+
+        engineMainModule = mainEngineParticles.main;
+        engineEmissionModule = mainEngineParticles.emission;
     }
 
     private void Update()
@@ -57,7 +63,7 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (state != State.Alive)
+        if (state != State.Alive || collisionsDisabled)
         {
             return;
         }
@@ -80,6 +86,8 @@ public class Rocket : MonoBehaviour
     {
         RespondToThrustInput();
         RespondToRotateInput();
+        RespondToDebugKeys();
+        RespondToEsc();
     }
 
     private void RespondToRotateInput()
@@ -104,22 +112,21 @@ public class Rocket : MonoBehaviour
         // Thrust 'Space'
         if (Input.GetKey(KeyCode.Space) && state == State.Alive)
         {
-            myRigidbody.AddRelativeForce(Vector3.up * thrustingForce);
+            myRigidbody.AddRelativeForce(Vector3.up * thrustingForce * Time.deltaTime, ForceMode.Acceleration);
             SetThrustingSound();
-            // mainEngineParticles.main.startLifetime = 1f;
-            var main = mainEngineParticles.main;
-            main.startSpeed = 15f;
-            var emission = mainEngineParticles.emission;
-            emission.rateOverTime = 100;
+            SetThrustingParticles();
         }
         else
         {
             SetIdleSound();
-            var main = mainEngineParticles.main;
-            main.startSpeed = 5f;
-            var emission = mainEngineParticles.emission;
-            emission.rateOverTime = 50;
+            SetIdleParticles();
         }
+    }
+
+    void SetThrustingParticles()
+    {
+        engineMainModule.startSpeed = 15f;
+        engineEmissionModule.rateOverTime = 100;
     }
 
     void SetThrustingSound()
@@ -129,6 +136,12 @@ public class Rocket : MonoBehaviour
             engineAudioSource.pitch = thrustingPitch;
             engineAudioSource.volume = thrustingVolume;
         }
+    }
+
+    void SetIdleParticles()
+    {
+        engineMainModule.startSpeed = 5f;
+        engineEmissionModule.rateOverTime = 50;
     }
 
     void SetIdleSound()
@@ -143,7 +156,7 @@ public class Rocket : MonoBehaviour
     void LoadNextScene()
     {
         int currentScene = SceneManager.GetActiveScene().buildIndex;
-        if (currentScene < SceneManager.sceneCountInBuildSettings)
+        if (currentScene < SceneManager.sceneCountInBuildSettings - 1)
         {
             SceneManager.LoadScene(currentScene + 1);
         }
@@ -175,5 +188,28 @@ public class Rocket : MonoBehaviour
         state = State.Transcending;
         landingParticles.Play();
         Invoke("LoadNextScene", 1);
+    }
+
+    void RespondToDebugKeys()
+    {
+        if (Debug.isDebugBuild)
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                LoadNextScene();
+            }
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                collisionsDisabled = !collisionsDisabled;
+            }
+        }
+    }
+
+    void RespondToEsc()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(0);
+        }
     }
 }

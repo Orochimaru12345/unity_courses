@@ -922,7 +922,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Level 1: Gate'
+  m_Text: 'Level 1: Asteroids'
 --- !u!222 &1121784563
 CanvasRenderer:
   m_ObjectHideFlags: 0
