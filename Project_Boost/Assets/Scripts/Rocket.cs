@@ -91,20 +91,20 @@ public class Rocket : MonoBehaviour
     }
 
     private void RespondToRotateInput()
-    {
-        myRigidbody.freezeRotation = true;
+    {       
         // Rotate 'wAsD'
         if (Input.GetKey(KeyCode.A) && state == State.Alive)
         {
+            myRigidbody.angularVelocity = Vector3.zero; // remove rotation due to physics
             this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
             myRigidbody.ResetInertiaTensor();
         }
         else if (Input.GetKey(KeyCode.D) && state == State.Alive)
         {
+            myRigidbody.angularVelocity = Vector3.zero; // remove rotation due to physics
             this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
             myRigidbody.ResetInertiaTensor();
         }
-        myRigidbody.freezeRotation = false;
     }
 
     private void RespondToThrustInput()
