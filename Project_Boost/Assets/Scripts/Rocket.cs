@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
-    [SerializeField] float rotatingForce = 1f;
     [SerializeField] float thrustingForce = 14f; // fix bug, when rocket does not thrust
     [SerializeField] float thrustingVolume = 0.8f;
     [SerializeField] float thrustingPitch = 1.6f;
@@ -14,7 +13,6 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem landingParticles = null;
     [SerializeField] ParticleSystem explosionParticles = null;
 
-    Rigidbody myRigidbody;
     AudioSource engineAudioSource;
     AudioSource explosionAudioSource;
     float defaultAudioSourcePitch = 0f;
@@ -36,8 +34,6 @@ public class Rocket : MonoBehaviour
 
     private void Start()
     {
-        myRigidbody = this.GetComponent<Rigidbody>();
-
         foreach (var audioSource in GetComponents<AudioSource>())
         {
             if (audioSource.clip.name == "explosion")
@@ -85,26 +81,8 @@ public class Rocket : MonoBehaviour
     void ProcessInput()
     {
         RespondToThrustInput();
-        RespondToRotateInput();
         RespondToDebugKeys();
         RespondToEsc();
-    }
-
-    private void RespondToRotateInput()
-    {       
-        // Rotate 'wAsD'
-        if (Input.GetKey(KeyCode.A) && state == State.Alive)
-        {
-            myRigidbody.angularVelocity = Vector3.zero; // remove rotation due to physics
-            this.transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * rotatingForce);
-            myRigidbody.ResetInertiaTensor();
-        }
-        else if (Input.GetKey(KeyCode.D) && state == State.Alive)
-        {
-            myRigidbody.angularVelocity = Vector3.zero; // remove rotation due to physics
-            this.transform.Rotate(-Vector3.forward * Time.deltaTime * rotatingForce);
-            myRigidbody.ResetInertiaTensor();
-        }
     }
 
     private void RespondToThrustInput()
@@ -112,7 +90,7 @@ public class Rocket : MonoBehaviour
         // Thrust 'Space'
         if (Input.GetKey(KeyCode.Space) && state == State.Alive)
         {
-            myRigidbody.AddRelativeForce(Vector3.up * thrustingForce * Time.deltaTime, ForceMode.Acceleration);
+            //myRigidbody.AddRelativeForce(Vector3.up * thrustingForce * Time.deltaTime, ForceMode.Acceleration);
             SetThrustingSound();
             SetThrustingParticles();
         }

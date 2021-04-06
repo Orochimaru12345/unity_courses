@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Level 1 Asteroids.unity
+    path: Assets/Scenes/AsteroidBelt.unity
     guid: 575715b9bcbf1b64fb1128c11a3dc48c
   - enabled: 1
     path: Assets/Scenes/Level 2 Curved.unity
