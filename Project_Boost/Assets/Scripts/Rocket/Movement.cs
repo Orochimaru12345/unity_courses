@@ -4,7 +4,6 @@ public class Movement : MonoBehaviour
 {
     // parameters
     [Tooltip("Acceleration")] [SerializeField] float thrustingForce = 500f;
-    [Tooltip("Engine sound")] [SerializeField] AudioClip engineAudioClip = null;
     [Tooltip("Thrusting sound volume")] [SerializeField] float thrustingVolume = 0.8f;
     [Tooltip("Thrusting sound pitch")] [SerializeField] float thrustingPitch = 1.6f;
 
@@ -27,18 +26,21 @@ public class Movement : MonoBehaviour
 
     public void StopEngine()
     {
+        // play sound
         if (engineAudioSource.isPlaying)
         {
             engineAudioSource.Stop();
         }
+        // play particles
         if (engineParticles.isPlaying)
         {
             engineParticles.Stop();
         }
     }
 
-    public void StartEngineSound()
+    public void StartEngine()
     {
+        // pause sound
         if (!engineAudioSource.isPlaying)
         {
             engineAudioSource.Play();
@@ -46,6 +48,16 @@ public class Movement : MonoBehaviour
         if (!engineAudioSource.loop)
         {
             engineAudioSource.loop = true;
+        }
+        // pause particles
+        if (!engineParticles.isPlaying)
+        {
+            engineParticles.Play();
+        }
+        if (!engineParticles.main.loop)
+        {
+            var m = engineParticles.main;
+            m.loop = true;
         }
     }
 
@@ -68,7 +80,7 @@ public class Movement : MonoBehaviour
         GetDefaultEngineSoundSettings();
         GetDefaultEngineParticlesSettings();
         // run and loop engine sound
-        StartEngineSound();
+        StartEngine();
         // allow to move
         StartMovement();
     }

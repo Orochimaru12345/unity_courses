@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e2a96f5dae885d409beef25f57c550e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zOffset: -38
+  zOffset: -44
   xOffset: 2
   yOffset: 10
 --- !u!45 &2339345623692336935
