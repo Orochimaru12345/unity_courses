@@ -7,8 +7,12 @@ public class Movement : MonoBehaviour
     [Tooltip("Engine sound")] [SerializeField] AudioClip engineAudioClip = null;
     [Tooltip("Thrusting sound volume")] [SerializeField] float thrustingVolume = 0.8f;
     [Tooltip("Thrusting sound pitch")] [SerializeField] float thrustingPitch = 1.6f;
-    
+
     [Tooltip("Rotation")] [SerializeField] float rotatingForce = 50f;
+
+    [Tooltip("Engine Particles")] [SerializeField] ParticleSystem engineParticles = null;
+    [Tooltip("Thrusting particles speed")] [SerializeField] float thrustingParticlesStartSpeed = 15f;
+    [Tooltip("Thrusting particles rate Over time")] [SerializeField] float thrustingParticlesRateOverTime = 150f;
 
     // cache
     Rigidbody myRigidbody = null;
@@ -18,12 +22,18 @@ public class Movement : MonoBehaviour
     bool isEnabled = true;
     float defaultEnginePitch = 0f;
     float defaultEngineVolume = 0f;
+    ParticleSystem.MinMaxCurve defaultEngineParticlesStartSpeed = 0f;
+    ParticleSystem.MinMaxCurve defaultEngineParticlesRateOverTime = 0f;
 
-    public void StopEngineSound()
+    public void StopEngine()
     {
         if (engineAudioSource.isPlaying)
         {
             engineAudioSource.Stop();
+        }
+        if (engineParticles.isPlaying)
+        {
+            engineParticles.Stop();
         }
     }
 
@@ -55,7 +65,8 @@ public class Movement : MonoBehaviour
         engineAudioSource = GetEngineAudioSource();
 
         // use them while rocket is not thrusting
-        GetDefaultEngineSoundProperties();
+        GetDefaultEngineSoundSettings();
+        GetDefaultEngineParticlesSettings();
         // run and loop engine sound
         StartEngineSound();
         // allow to move
@@ -78,10 +89,14 @@ public class Movement : MonoBehaviour
         {
             ApplyAcceleration();
             SetThrustingEngineSound();
+            SetThrustingEngineParticles();
+            var a = engineParticles.main;
+            a.startSpeed = 15f;
         }
         else
         {
             SetIdleEngineSound();
+            SetIdleEngineParticles();
         }
     }
 
@@ -129,12 +144,24 @@ public class Movement : MonoBehaviour
         return null;
     }
 
-    private void GetDefaultEngineSoundProperties()
+    private void GetDefaultEngineSoundSettings()
     {
         if (engineAudioSource)
         {
             defaultEnginePitch = engineAudioSource.pitch;
             defaultEngineVolume = engineAudioSource.volume;
+        }
+    }
+
+    private void GetDefaultEngineParticlesSettings()
+    {
+        if (engineParticles)
+        {
+            var m = engineParticles.main;
+            defaultEngineParticlesStartSpeed = m.startSpeed;
+
+            var e = engineParticles.emission;
+            defaultEngineParticlesRateOverTime = e.rateOverTime;
         }
     }
 
@@ -144,9 +171,27 @@ public class Movement : MonoBehaviour
         engineAudioSource.volume = thrustingVolume;
     }
 
+    private void SetThrustingEngineParticles()
+    {
+        var m = engineParticles.main;
+        m.startSpeed = new ParticleSystem.MinMaxCurve(thrustingParticlesStartSpeed);
+
+        var e = engineParticles.emission;
+        e.rateOverTime = new ParticleSystem.MinMaxCurve(thrustingParticlesRateOverTime);
+    }
+
     private void SetIdleEngineSound()
     {
         engineAudioSource.pitch = defaultEnginePitch;
         engineAudioSource.volume = defaultEngineVolume;
+    }
+
+    private void SetIdleEngineParticles()
+    {
+        var m = engineParticles.main;
+        m.startSpeed = defaultEngineParticlesStartSpeed;
+
+        var e = engineParticles.emission;
+        e.rateOverTime = defaultEngineParticlesRateOverTime;
     }
 }

@@ -82,7 +82,7 @@ public class CollisionHandler : MonoBehaviour
     {
         if (myMovement)
         {
-            myMovement.StopEngineSound();
+            myMovement.StopEngine();
             myMovement.StopMovement();
         }
     }

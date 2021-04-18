@@ -550,7 +550,10 @@ MonoBehaviour:
   engineAudioClip: {fileID: 8300000, guid: ec391c91fdc8e0242b42e6e74efef87d, type: 3}
   thrustingVolume: 0.8
   thrustingPitch: 1.6
-  rotatingForce: 150
+  rotatingForce: 170
+  engineParticles: {fileID: 5651983250962043352}
+  thrustingParticlesStartSpeed: 15
+  thrustingParticlesRateOverTime: 250
 --- !u!114 &1513100257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,10 +1181,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: EngineFlames
       objectReference: {fileID: 0}
+    - target: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
 --- !u!4 &4425879916886408865 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1990798171145960576, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
+  m_PrefabInstance: {fileID: 2795431581247488545}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5651983250962043352 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
   m_PrefabInstance: {fileID: 2795431581247488545}
   m_PrefabAsset: {fileID: 0}
