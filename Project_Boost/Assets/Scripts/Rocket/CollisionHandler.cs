@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +12,7 @@ public class CollisionHandler : MonoBehaviour
     Movement myMovement = null;
     AudioSource freeAudioSource = null; // any audio source without a clip
     bool isTransitioning = false;
+    bool collisionEnabled = true;
 
     private void Start()
     {
@@ -24,19 +24,34 @@ public class CollisionHandler : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Hit game object with tag: '" + collision.gameObject.tag + "'");
-
-        switch (collision.gameObject.tag)
+        if (collisionEnabled)
         {
-            case PBConsts.FRIENDLY_TAG:
-                // rocket can touch a launch pad without any consequences
-                break;
-            case PBConsts.FINISH_TAG:
-                ProcessLandingPadTouch();
-                break;
-            default:
-                ProcessObstacleCrash();
-                break;
+            switch (collision.gameObject.tag)
+            {
+                case PBConsts.FRIENDLY_TAG:
+                    // rocket can touch a launch pad without any consequences
+                    break;
+                case PBConsts.FINISH_TAG:
+                    ProcessLandingPadTouch();
+                    break;
+                default:
+                    ProcessObstacleCrash();
+                    break;
+            }
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCollision();
+        }
+    }
+
+    private void ToggleCollision()
+    {
+        collisionEnabled = !collisionEnabled;
     }
 
     private void ProcessLandingPadTouch()

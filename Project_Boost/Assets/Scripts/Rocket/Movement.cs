@@ -102,8 +102,6 @@ public class Movement : MonoBehaviour
             ApplyAcceleration();
             SetThrustingEngineSound();
             SetThrustingEngineParticles();
-            var a = engineParticles.main;
-            a.startSpeed = 15f;
         }
         else
         {

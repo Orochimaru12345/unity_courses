@@ -547,7 +547,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thrustingForce: 1000
-  engineAudioClip: {fileID: 8300000, guid: ec391c91fdc8e0242b42e6e74efef87d, type: 3}
   thrustingVolume: 0.8
   thrustingPitch: 1.6
   rotatingForce: 170
@@ -1182,8 +1181,20 @@ PrefabInstance:
       value: EngineFlames
       objectReference: {fileID: 0}
     - target: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
+      propertyPath: ShapeModule.type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
       propertyPath: ShapeModule.angle
-      value: 0
+      value: 12.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540361564267123705, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71edfb19732720a43b5eee37b758d8dc, type: 3}
