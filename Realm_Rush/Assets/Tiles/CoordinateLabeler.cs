@@ -13,7 +13,7 @@ public class CoordinateLabeler : MonoBehaviour
     TextMesh label;
     Vector2Int coordinates = new Vector2Int();
     GridManager gridManager;
-    bool labelEnabled = false;
+    bool labelEnabled = true;
 
     void Awake()
     {
@@ -85,7 +85,7 @@ public class CoordinateLabeler : MonoBehaviour
 
         if (node.isWalkable == false)
         {
-            label.color = blockedColor;
+            label.color = new Color(0, 0, 0, 0);
         }
         else if (node.isPath)
         {
@@ -93,11 +93,11 @@ public class CoordinateLabeler : MonoBehaviour
         }
         else if (node.isExplored)
         {
-            label.color = exploredColor;
+            label.color = new Color(0, 0, 0, 0);
         }
         else
         {
-            label.color = defaultColor;
+            label.color = new Color(0, 0, 0, 0);
         }
     }
 
